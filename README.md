@@ -15,3 +15,8 @@
    2. -fw2 - min.scale = 1
    3. -fw3 - container freezer (pending implementation)
    4. -fw4 - custom implementation (pending implementation)
+
+TODO:
+1. update apps with unique properties (app size, init / run time using sleep calls)
+2. deploy_framework.sh deploying Knative Serving apps on Knative framework version - 1 and 2
+3. Test run_perf_python.sh on live endpoints
