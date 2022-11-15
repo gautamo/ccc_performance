@@ -20,3 +20,5 @@ TODO:
 1. update apps with unique properties (app size, init / run time using sleep calls)
 2. deploy_framework.sh deploying Knative Serving apps on Knative framework version - 1 and 2
 3. Test run_perf_python.sh on live endpoints
+4. Collect results into digestible format
+5. Adapt to use arbitrary amount of apps
