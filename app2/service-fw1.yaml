@@ -1,0 +1,16 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: app2-fw1
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: docker.io/gautamo/app2
+          env:
+            - name: TARGET
+              value: "Python Sample v1"
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"

@@ -8,6 +8,10 @@ build () {
     docker build -t gautamo/app2 app2
     echo -e "\nBUILD APP3\n"
     docker build -t gautamo/app3 app3
+    echo -e "\nBUILD APP4\n"
+    docker build -t gautamo/app4 app4
+    echo -e "\nBUILD APP5\n"
+    docker build -t gautamo/app5 app5
 }
 
 deploy () {
@@ -18,6 +22,10 @@ deploy () {
     docker push gautamo/app2
     echo -e "\nDEPLOY APP3\n"
     docker push gautamo/app3
+    echo -e "\nDEPLOY APP4\n"
+    docker push gautamo/app4
+    echo -e "\nDEPLOY APP5\n"
+    docker push gautamo/app5
 }
 
 echo -e "\nREMEMBER TO RUN 'docker login' BEFORE EXECUTING. ENSURE YOU HAVE PERMISSIONS.\n"

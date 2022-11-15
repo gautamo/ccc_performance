@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: app3
+  name: app3-fw1
   namespace: default
 spec:
   template:
@@ -13,6 +13,4 @@ spec:
               value: "Python Sample v1"
     metadata:
       annotations:
-        autoscaling.knative.dev/minScale: "1"
-        autoscaling.knative.dev/maxScale: "4"
-        autoscaling.knative.dev/target: "2"
+        autoscaling.knative.dev/minScale: "0"
