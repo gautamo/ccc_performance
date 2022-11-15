@@ -39,6 +39,7 @@ def setup():
     APP1_ENDPOINT, APP2_ENDPOINT, APP3_ENDPOINT, APP4_ENDPOINT, APP5_ENDPOINT = get_endpoints()
     # create a dictionary of endpoints
     config = {
+        "LOAD_TYPE": LOAD_CONFIG.split("/")[2].split(".")[0],
         "SCALE_FACTOR": SCALE_FACTOR,
         "WINDOW_SIZE": WINDOW_SIZE,
         "LOAD_PATTERN": LOAD_PATTERN,
@@ -73,16 +74,16 @@ def run_perf(config):
         print("Running hey load generator for window " + str(i+1) + " of " + str(len(config["LOAD_PATTERN"])))
         qps = get_qps(config, i)
         # send output to file
-        with open("result/p1_stdout.txt","a") as out1, open("result/p1_stderr.txt","a") as err1:
-            p1 = subprocess.Popen(["hey", "-z", str(config["WINDOW_SIZE"])+"s", "-c", str(1), "-q", str(qps), config["APP1"]], stdout=out1, stderr=err1)
-        with open("result/p2_stdout.txt","a") as out2, open("result/p2_stderr.txt","a") as err2:
-            p2 = subprocess.Popen(["hey", "-z", str(config["WINDOW_SIZE"])+"s", "-c", str(1), "-q", str(qps), config["APP2"]], stdout=out2, stderr=err2)
-        with open("result/p3_stdout.txt","a") as out3, open("result/p3_stderr.txt","a") as err3:
-            p3 = subprocess.Popen(["hey", "-z", str(config["WINDOW_SIZE"])+"s", "-c", str(1), "-q", str(qps), config["APP3"]], stdout=out3, stderr=err3)
-        with open("result/p4_stdout.txt","a") as out4, open("result/p4_stderr.txt","a") as err4:
-            p4 = subprocess.Popen(["hey", "-z", str(config["WINDOW_SIZE"])+"s", "-c", str(1), "-q", str(qps), config["APP4"]], stdout=out4, stderr=err4)
-        with open("result/p5_stdout.txt","a") as out5, open("result/p5_stderr.txt","a") as err5:
-            p5 = subprocess.Popen(["hey", "-z", str(config["WINDOW_SIZE"])+"s", "-c", str(1), "-q", str(qps), config["APP5"]], stdout=out5, stderr=err5)
+        with open(f"result/p1_{config['LOAD_TYPE']}.txt","a") as out1:
+            p1 = subprocess.Popen(["hey", "-z", str(config["WINDOW_SIZE"])+"s", "-c", str(1), "-q", str(qps), "-m", "GET", config["APP1"]], stdout=out1)
+        with open(f"result/p2_{config['LOAD_TYPE']}.txt","a") as out2:
+            p2 = subprocess.Popen(["hey", "-z", str(config["WINDOW_SIZE"])+"s", "-c", str(1), "-q", str(qps), "-m", "GET", config["APP2"]], stdout=out2)
+        with open(f"result/p3_{config['LOAD_TYPE']}.txt","a") as out3:
+            p3 = subprocess.Popen(["hey", "-z", str(config["WINDOW_SIZE"])+"s", "-c", str(1), "-q", str(qps), "-m", "GET", config["APP3"]], stdout=out3)
+        with open(f"result/p4_{config['LOAD_TYPE']}.txt","a") as out4:
+            p4 = subprocess.Popen(["hey", "-z", str(config["WINDOW_SIZE"])+"s", "-c", str(1), "-q", str(qps), "-m", "GET", config["APP4"]], stdout=out4)
+        with open(f"result/p5_{config['LOAD_TYPE']}.txt","a") as out5:
+            p5 = subprocess.Popen(["hey", "-z", str(config["WINDOW_SIZE"])+"s", "-c", str(1), "-q", str(qps), "-m", "GET", config["APP5"]], stdout=out5)
         p1.wait()
         p2.wait()
         p3.wait()
