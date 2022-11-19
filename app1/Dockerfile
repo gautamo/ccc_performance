@@ -2,6 +2,10 @@
 # https://hub.docker.com/_/python
 FROM python:3.7-slim
 
+# add random sleep to simulate a long build with 2 second deviation
+RUN sleep 4.5
+RUN sleep $(( RANDOM % 2 ))
+
 # Allow statements and log messages to immediately appear in the Knative logs
 ENV PYTHONUNBUFFERED True
 
