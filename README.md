@@ -17,7 +17,7 @@
    4. -fw4 - custom implementation (pending implementation)
 
 TODO:
-1. update apps with unique properties (app size, init / run time using sleep calls)
+1. update apps with unique properties (app size, init / run time using sleep calls) (DONE)
 2. deploy_framework.sh deploying Knative Serving apps on Knative framework version - 1 and 2
 3. Test run_perf_python.sh on live endpoints
 4. Collect results into digestible format
