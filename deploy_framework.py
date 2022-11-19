@@ -5,7 +5,8 @@ import yaml
 import json
 
 APP_INSTANCES = 1
-apps = ['app1', 'app2', 'app3', 'app4', 'app5']
+# apps = ['app1', 'app2', 'app3', 'app4', 'app5']
+apps = ['app1']
 endpoints_file = "config/endpoints.json"
 
 # update metadata name in the file app1/service-fw1.yaml
@@ -35,7 +36,7 @@ def deploy():
             update_metadata_name(deployment_file, metadata_name)
             print(f"{count + 1}: Deploying {metadata_name} from {deployment_file}")
             subprocess.run(["kubectl", "apply", "-f", deployment_file])
-            app_service[metadata_name] = f"http://{metadata_name}.default.127.0.0.1.sslip.io"
+            app_service[metadata_name] = f"http://{metadata_name}.default.127.0.0.1.nip.io"
             count += 1
         update_metadata_name(deployment_file, init_metadata_name)
 

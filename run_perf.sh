@@ -36,7 +36,6 @@ def get_endpoints():
 def setup():
     LOAD_CONFIG = process_arguments()
     SCALE_FACTOR, WINDOW_SIZE, LOAD_PATTERN = get_load(LOAD_CONFIG)
-    APP1_ENDPOINT, APP2_ENDPOINT, APP3_ENDPOINT, APP4_ENDPOINT, APP5_ENDPOINT = get_endpoints()
     # create a dictionary of endpoints
     config = {
         "LOAD_TYPE": LOAD_CONFIG.split("/")[2].split(".")[0],
@@ -66,18 +65,20 @@ def run_perf(config):
 
     # run hey load generator for all apps in parallel with 5 processes
     print(f"\nRUNNING HEY LOAD GENERATOR FOR ALL {len(config['ENDPOINTS'].items())} APPS IN PARALLEL\n")
+    true_endpoint = "http://localhost:8080"
     promise_list = []
     for load_index in range(len(config["LOAD_PATTERN"])):
         qps = get_qps(config, load_index)
         request_count = config["LOAD_PATTERN"][load_index] * config["SCALE_FACTOR"]
-        
         print(f"Running hey load generator for {config['WINDOW_SIZE']}s window {load_index+1} of {len(config['LOAD_PATTERN'])} with {qps} QPS")
-        promise_list = []
+
         for endpoint_name, endpoint in config["ENDPOINTS"].items():
+            # get endpoint after http://
+            header = f"Host: {endpoint.split('//')[1]}"
             # send output to file
             with open(f"result/{endpoint_name}_{config['LOAD_TYPE']}.txt","a") as out:
-                promise = subprocess.Popen(["hey", "-n", str(request_count), "-c", str(1), "-q", str(qps), "-t", str(60), "-m", "GET", endpoint], stdout=out)
-                # promise = subprocess.Popen(["hey", "-z", str(config['WINDOW_SIZE'])+"s", "-c", str(1), "-q", str(qps), "-t", str(60), "-m", "GET", endpoint], stdout=out)  
+                promise = subprocess.Popen(["hey", "-n", str(request_count), "-c", str(1), "-q", str(qps), "-t", str(60), "-m", "GET", "-H", header, true_endpoint], stdout=out)
+                # promise = subprocess.Popen(["hey", "-z", str(config['WINDOW_SIZE'])+"s", "-c", str(1), "-q", str(qps), "-t", str(60), "-m", "GET", "-H", header, true_endpoint], stdout=out)  
                 promise_list.append(promise)
         time.sleep(config["WINDOW_SIZE"])
     for promise_item in promise_list:
@@ -90,7 +91,6 @@ if __name__ == "__main__":
     run_perf(config)
     print("COMPLETE")
 
-    # Q: How do I run the hey load generator with a specific number of queries per second (QPS) for a specific duration, and let existing queries finish before stopping?
 
 
 
