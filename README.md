@@ -6,15 +6,17 @@
    3. app3 char: Matrix Multiply (Memory Size: 64 MB, Run Time: 2.5 sec, Init. Time: 2.2 sec)
    4. app4 char: Web Serving (Memory Size: 16 MB, Run Time: 2.4 sec, Init. Time: 2 sec)
    5. app5 char: Floating Point (Memory Size: 32 MB, Run Time: 2 sec, Init. Time: 1.7 sec)
-2. Run run_perf.sh to run new perf test, pass in load pattern
-   1. -L - linear load 
-   2. -E - exponential load
-   3. -S - spike load
-3. Run deploy_framework.sh to deploy app1-app5 to Knative Serving, pass in framework version (have Knative running, check pods with kubectl get all)
+
+2. Run deploy_framework.sh to deploy app1-app5 to Knative Serving, pass in framework version (have Knative running, check pods with kubectl get all)
    1. -fw1 - min.scale = 0
    2. -fw2 - min.scale = 1
    3. -fw3 - container freezer (pending implementation)
    4. -fw4 - custom implementation (pending implementation)
+   
+3. Run run_perf.sh to run new perf test, pass in load pattern
+   1. -L - linear load
+   2. -E - exponential load
+   3. -S - spike load
 
 TODO:
 1. update apps with unique properties (app size, init / run time using sleep calls) (DONE)
