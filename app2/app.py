@@ -8,8 +8,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-   # Sleep for 56 seconds + random time between 0 and 2 second
-   time.sleep(56 + random.uniform(0, 2))
+   # Sleep for 30 seconds + random time between 0 and 2 second
+   time.sleep(30 + random.uniform(0, 2))
 
    return f"APP2: Time is {time.ctime()} in Process ID {os.getpid()}\n"
 
