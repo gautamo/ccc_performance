@@ -19,6 +19,7 @@
    1. -P - poisson load
    2. -E - exponential load
    3. -S - spike load
+   4. -N -O1 does new_poission distribution with 250 rps shared by 10 workers
 
 - hey load generator feedback will appear in the results folder during run of run_perf.sh
 - if you want to update the load pattern, you can update the appropriate json in the load/ folder

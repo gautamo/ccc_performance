@@ -6,7 +6,7 @@ import sys
 import subprocess
 import time
 
-OPTION = 1
+OPTION = 3
 
 def process_arguments():
     LOAD_CONFIG = ""
