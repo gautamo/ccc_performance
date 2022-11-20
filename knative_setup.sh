@@ -97,5 +97,3 @@ echo "knative setup with prometheus + graphana complete"
 
 
 
-
-

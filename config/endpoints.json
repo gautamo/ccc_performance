@@ -1,3 +1,5 @@
 {
-    "app1-fw1-1": "http://app1-fw1-1.default.127.0.0.1.nip.io"
+    "autoscale-go-fw1-1": "http://autoscale-go-fw1-1.default.127.0.0.1.nip.io",
+    "autoscale-go-fw1-2": "http://autoscale-go-fw1-2.default.127.0.0.1.nip.io",
+    "autoscale-go-fw1-3": "http://autoscale-go-fw1-3.default.127.0.0.1.nip.io"
 }

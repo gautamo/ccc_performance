@@ -61,11 +61,22 @@ def proceed():
     else:
         exit(1)
 
+def getTrueEndpoint(endpoint_name):
+    if endpoint_name.split("-")[0] == "autoscale" and endpoint_name.split("-")[1] == "go":
+        # get instance number 
+        instance = int(endpoint_name.split("-")[3])
+        sleep = 10 * instance
+        bloat = 5 * instance
+        # prime = 10000 * instance
+        return f"http://localhost:8080?sleep={sleep}&bloat={bloat}"
+
+    return "http://localhost:8080"
+
+
 def run_perf(config):
 
     # run hey load generator for all apps in parallel with 5 processes
     print(f"\nRUNNING HEY LOAD GENERATOR FOR ALL {len(config['ENDPOINTS'].items())} APPS IN PARALLEL\n")
-    true_endpoint = "http://localhost:8080"
     promise_list = []
     for load_index in range(len(config["LOAD_PATTERN"])):
         qps = get_qps(config, load_index)
@@ -73,17 +84,16 @@ def run_perf(config):
         print(f"Running hey load generator for {config['WINDOW_SIZE']}s window {load_index+1} of {len(config['LOAD_PATTERN'])} with {qps} WORKERS/QPS")
 
         for endpoint_name, endpoint in config["ENDPOINTS"].items():
+            true_endpoint = getTrueEndpoint(endpoint_name)
+            host = f"{endpoint.split('//')[1]}"
             # send output to file
             with open(f"result/{endpoint_name}_{config['LOAD_TYPE']}.txt","a") as out:
                 # hey -n 10 -c 1 -m 'GET' -host "app1-fw1-1.default.127.0.0.1.nip.io"  "http://localhost:8080"
-                host = f"{endpoint.split('//')[1]}"
                 # call = f"hey -n {request_count} -c 1 -q {qps} -t 20 -m 'GET' -host '{host}' '{true_endpoint}'"
                 # call = f"hey -z {config['WINDOW_SIZE']}s -c 1 -t 20 -q {qps} -m 'GET' -host '{host}' '{true_endpoint}'"
                 call = f"hey -z {config['WINDOW_SIZE']}s -c {qps} -t 20 -m 'GET' -host '{host}' '{true_endpoint}'"
                 print(f"Request: {call}")
-                promise = subprocess.Popen(call, shell=True, stdout=out)
-                # promise = subprocess.Popen(["hey", "-n", str(request_count), "-c", str(1), "-q", str(qps), "-m", "'GET'", "-host", host, true_endpoint], stdout=out)
-                # promise = subprocess.Popen(["hey", "-z", str(config['WINDOW_SIZE'])+"s", "-c", str(1), "-q", str(qps), "-t", str(60), "-m", "GET", "-H", header, true_endpoint], stdout=out)  
+                promise = subprocess.Popen(call, shell=True, stdout=out)  
                 promise_list.append(promise)
         time.sleep(config["WINDOW_SIZE"])
     for promise_item in promise_list:

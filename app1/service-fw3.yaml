@@ -1,0 +1,21 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: app1-fw3
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/metric: rps
+        autoscaling.knative.dev/minScale: '1'
+        autoscaling.knative.dev/target: '10'
+    spec:
+      containerConcurrency: 5
+      containers:
+      - env:
+        - name: TARGET
+          value: Python Sample v1
+        image: docker.io/gautamo/app1
+        readinessProbe:
+          periodSeconds: 0
