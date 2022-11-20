@@ -1,11 +1,19 @@
+#!/bin/bash
+
+### NOTICE: IT IS BEST IF YOU RUN EACH COMMAND ONE BY ONE INSTEAD OF RUNNING THIS SCRIPT AS A WHOLE
+### THIS IS SO YOU UNDERSTAND WHAT EACH COMMAND IS DOING
 
 ### knative cluster setup (source: https://github.com/knative/serving/blob/main/DEVELOPMENT.md)
 
+# cd into the serving directory
+# check if the directory is serving
+if [ ! -d "serving" ]; then
+    echo "serving directory not found, please cd into the serving directory"
+    exit 1
+fi
+
 # create a new cluster
 kind create cluster -n knative
-
-# cd into the serving directory
-cd ../serving
 
 # apply certs
 kubectl apply -f ./third_party/cert-manager-latest/cert-manager.yaml
@@ -64,9 +72,9 @@ kubectl get svc -n monitoring
 kubectl get secret -n monitoring prometheus-grafana -o yaml
 
 # Decode and print the username (retrieve the value of the key admin-user)
-echo YOUR_USERNAME | base64 --decode
+# echo YOUR_USERNAME | base64 --decode
 # Decode and print the password (retrieve the value of the key admin-password)
-echo YOUR_PASSWORD | base64 --decode
+# echo YOUR_PASSWORD | base64 --decode
 
 # access the grafana instance (in a different terminal) - accessed via http://localhost:3000 (user: admin, password: prom-operator)
 # kubectl port-forward svc/prometheus-grafana -n monitoring 3000:80
@@ -76,7 +84,7 @@ echo YOUR_PASSWORD | base64 --decode
 # Dashboard: knative-serving-http-requests.json
 
 
-### delete the cluster (for cleanup)
+### delete the cluster (only do this for cleanup)
 
 # ko delete --ignore-not-found=true \
 #  -Rf config/core/ \
@@ -84,6 +92,8 @@ echo YOUR_PASSWORD | base64 --decode
 #  -f ./third_party/cert-manager-latest/cert-manager.yaml
 
 # kind delete cluster -n knative
+
+echo "knative setup with prometheus + graphana complete"
 
 
 

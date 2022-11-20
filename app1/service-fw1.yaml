@@ -7,7 +7,9 @@ spec:
   template:
     metadata:
       annotations:
+        autoscaling.knative.dev/metric: rps
         autoscaling.knative.dev/minScale: '0'
+        autoscaling.knative.dev/target: '10'
     spec:
       containers:
       - env:

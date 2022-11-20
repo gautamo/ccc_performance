@@ -8,17 +8,17 @@ import time
 
 def process_arguments():
     LOAD_CONFIG = ""
-    # take command line argument for --spike or -S, --linear or -L, --exponential or -E
+    # take command line argument for --spike or -S, --poisson or -P, --exponential or -E
     if len(sys.argv) == 2:
         if sys.argv[1] == "--spike" or sys.argv[1] == "-S":
             LOAD_CONFIG = "config/load/spike.json"
-        elif sys.argv[1] == "--linear" or sys.argv[1] == "-L":
-            LOAD_CONFIG = "config/load/linear.json"
+        elif sys.argv[1] == "--linear" or sys.argv[1] == "-P":
+            LOAD_CONFIG = "config/load/poisson.json"
         elif sys.argv[1] == "--exponential" or sys.argv[1] == "-E":
             LOAD_CONFIG = "config/load/exponential.json"
     
     if not os.path.isfile(LOAD_CONFIG):
-        print("\nPlease specify a valid test type: --spike (-S), --linear (-L), or --exponential (-E)\n")
+        print("\nPlease specify a valid test type: --spike (-S), --poisson (-P), or --exponential (-E)\n")
         exit(1)
     
     return LOAD_CONFIG
@@ -70,14 +70,19 @@ def run_perf(config):
     for load_index in range(len(config["LOAD_PATTERN"])):
         qps = get_qps(config, load_index)
         request_count = config["LOAD_PATTERN"][load_index] * config["SCALE_FACTOR"]
-        print(f"Running hey load generator for {config['WINDOW_SIZE']}s window {load_index+1} of {len(config['LOAD_PATTERN'])} with {qps} QPS")
+        print(f"Running hey load generator for {config['WINDOW_SIZE']}s window {load_index+1} of {len(config['LOAD_PATTERN'])} with {qps} WORKERS/QPS")
 
         for endpoint_name, endpoint in config["ENDPOINTS"].items():
-            # get endpoint after http://
-            header = f"Host: {endpoint.split('//')[1]}"
             # send output to file
             with open(f"result/{endpoint_name}_{config['LOAD_TYPE']}.txt","a") as out:
-                promise = subprocess.Popen(["hey", "-n", str(request_count), "-c", str(1), "-q", str(qps), "-t", str(60), "-m", "GET", "-H", header, true_endpoint], stdout=out)
+                # hey -n 10 -c 1 -m 'GET' -host "app1-fw1-1.default.127.0.0.1.nip.io"  "http://localhost:8080"
+                host = f"{endpoint.split('//')[1]}"
+                # call = f"hey -n {request_count} -c 1 -q {qps} -t 20 -m 'GET' -host '{host}' '{true_endpoint}'"
+                # call = f"hey -z {config['WINDOW_SIZE']}s -c 1 -t 20 -q {qps} -m 'GET' -host '{host}' '{true_endpoint}'"
+                call = f"hey -z {config['WINDOW_SIZE']}s -c {qps} -t 20 -m 'GET' -host '{host}' '{true_endpoint}'"
+                print(f"Request: {call}")
+                promise = subprocess.Popen(call, shell=True, stdout=out)
+                # promise = subprocess.Popen(["hey", "-n", str(request_count), "-c", str(1), "-q", str(qps), "-m", "'GET'", "-host", host, true_endpoint], stdout=out)
                 # promise = subprocess.Popen(["hey", "-z", str(config['WINDOW_SIZE'])+"s", "-c", str(1), "-q", str(qps), "-t", str(60), "-m", "GET", "-H", header, true_endpoint], stdout=out)  
                 promise_list.append(promise)
         time.sleep(config["WINDOW_SIZE"])
