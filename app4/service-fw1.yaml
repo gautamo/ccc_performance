@@ -12,7 +12,4 @@ spec:
         autoscaling.knative.dev/metric: "rps"
     spec:
       containers:
-      - env:
-        - name: TARGET
-          value: Python Sample v1
-        image: docker.io/gautamo/app4
+      - image: docker.io/gautamo/app4

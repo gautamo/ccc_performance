@@ -20,7 +20,6 @@ spec:
   template:
     metadata:
       annotations:
-        # Target 10 in-flight-requests per pod.
         autoscaling.knative.dev/metric: rps
         autoscaling.knative.dev/minScale: '1'
         autoscaling.knative.dev/target: '10'

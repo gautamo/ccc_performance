@@ -13,9 +13,6 @@ spec:
     spec:
       containerConcurrency: 5
       containers:
-      - env:
-        - name: TARGET
-          value: Python Sample v1
-        image: docker.io/gautamo/app1
+      - image: docker.io/gautamo/app1
         readinessProbe:
           periodSeconds: 0

@@ -12,7 +12,7 @@ def hello_world():
    with open("file_16MB", "rb") as f:
       file = f.read()
 
-   time.sleep(random.uniform(0, 0.5))
+   time.sleep(random.uniform(0, 0.1))
 
    return f"APP1: Time is {time.ctime()} in Process ID {os.getpid()}\n"
 

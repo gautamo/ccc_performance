@@ -6,8 +6,8 @@ import json
 
 APP_INSTANCES = 1
 # apps = ['app1', 'app2', 'app3', 'app4', 'app5']
-# apps = ['app1'] # since we only want to test with one app
-apps = ['autoscale-go']
+apps = ['app1'] # since we only want to test with one app
+# apps = ['autoscale-go']
 
 endpoints_file = "config/endpoints.json"
 
