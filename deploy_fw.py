@@ -53,7 +53,11 @@ def delete():
         app_service = json.load(f)
 
     for index, app in enumerate(app_service.keys()):
-        app_name, app_framework, app_instance = app.split("-")
+        if len(app.split("-")) == 3:
+            app_name, app_framework, app_instance = app.split("-")
+        elif len(app.split("-")) == 4:
+            app_name_p1, app_name_p2, app_framework, app_instance = app.split("-")
+            app_name = app_name_p1 + "-" + app_name_p2
         deployment_file = app_name + "/service-fw" + app_framework[2] + ".yaml"
         print(f"{index + 1}: Deleting {app} from {deployment_file}")
         update_metadata_name(deployment_file, app)
