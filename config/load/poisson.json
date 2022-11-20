@@ -1,5 +1,5 @@
 {
-    "LOAD_PATTERN": [2, 4, 8, 16, 32, 30, 24, 16, 10, 6],
+    "LOAD_PATTERN": [2, 7, 15, 20, 20, 16, 10, 6, 3, 1],
     "SCALE_FACTOR": 100,
     "WINDOW_SIZE": 30
 }
