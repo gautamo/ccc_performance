@@ -74,7 +74,6 @@ def getTrueEndpoint(endpoint_name):
 
 
 def run_perf(config):
-
     # run hey load generator for all apps in parallel with 5 processes
     print(f"\nRUNNING HEY LOAD GENERATOR FOR ALL {len(config['ENDPOINTS'].items())} APPS IN PARALLEL\n")
     promise_list = []
@@ -102,8 +101,12 @@ def run_perf(config):
 if __name__ == "__main__":
     config = setup()
     proceed()
+    # print start time
+    print(f"\nSTART TIME: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}")
     # run the load test
     run_perf(config)
+    # print end time
+    print(f"\nEND TIME: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}")
     print("COMPLETE")
 
 
